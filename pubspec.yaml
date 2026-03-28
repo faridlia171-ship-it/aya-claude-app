@@ -48,8 +48,8 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  # 🧠 AI/ML - Local LLM
-  dart_llm: ^0.2.0
+  # 🧠 AI/ML - Loca# dart_llm: ^0.2.0l LLM
+  # dart_llm: ^0.2.0
 
   # 📊 LOGGING
   logger: ^2.0.0
