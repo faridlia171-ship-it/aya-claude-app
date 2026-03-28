@@ -1,0 +1,85 @@
+#!/bin/bash
+
+echo "🚀 Prof AYA - Setup Codespaces"
+echo "=============================="
+
+# 1. Install Flutter
+echo "📦 Installing Flutter SDK..."
+if [ ! -d "/opt/flutter" ]; then
+  git clone https://github.com/flutter/flutter.git /opt/flutter
+fi
+/opt/flutter/bin/flutter --version
+
+# 2. Update Flutter
+echo "🔄 Updating Flutter..."
+/opt/flutter/bin/flutter upgrade
+
+# 3. Get Flutter pub dependencies
+echo "📚 Installing packages..."
+flutter pub get
+
+# 4. Create assets directories
+echo "📁 Creating asset directories..."
+mkdir -p assets/{quran,hadith,vocabulary,images,models,fonts}
+
+# 5. Download Quran data
+echo "📖 Downloading Quran data..."
+curl -o assets/quran/quran-uthmani.json \
+  https://cdn.jsdelivr.net/gh/fawazahmed0/quran-api@1/editions/quran-uthmani.json 2>/dev/null || \
+  echo "⚠️  Quran data download failed (may need manual download)"
+
+# 6. Create minimum vocabulary.json
+echo "🔤 Creating vocabulary.json..."
+cat > assets/vocabulary/vocabulary.json << 'EOF'
+{
+  "vocabulary_sets": [
+    {
+      "id": "alphabet_001",
+      "category": "Alphabet",
+      "level": "beginner",
+      "words": [
+        {"arabic": "ا", "transliteration": "alif", "english": "Alef", "french": "Alef"},
+        {"arabic": "ب", "transliteration": "ba", "english": "Ba", "french": "Ba"},
+        {"arabic": "ت", "transliteration": "ta", "english": "Ta", "french": "Ta"},
+        {"arabic": "ث", "transliteration": "tha", "english": "Tha", "french": "Tha"},
+        {"arabic": "ج", "transliteration": "jim", "english": "Jim", "french": "Jim"}
+      ]
+    }
+  ]
+}
+EOF
+
+# 7. Create alphabet.json
+echo "🔤 Creating alphabet.json..."
+cat > assets/vocabulary/alphabet.json << 'EOF'
+{
+  "alphabet": [
+    {
+      "number": 1,
+      "letter": "ا",
+      "transliteration": "alif",
+      "english_name": "Alef",
+      "french_name": "Alef",
+      "example_word": "أسد",
+      "example_meaning": "Lion",
+      "isolated_form": "ا",
+      "initial_form": "ا",
+      "medial_form": "ـا",
+      "final_form": "ـا"
+    }
+  ]
+}
+EOF
+
+# 8. Run flutter doctor
+echo "🏥 Running Flutter Doctor..."
+flutter doctor -v
+
+echo ""
+echo "✅ Setup Complete!"
+echo "🚀 Ready to build Prof AYA!"
+echo ""
+echo "Next steps:"
+echo "  flutter run       # Run app in debug mode"
+echo "  flutter build apk --release  # Build APK"
+echo "  flutter build web --release  # Build web"
